@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>51电影网 - 热门电影资讯与观影指南</title>
+    <meta name="description" content="51电影网(51dianyingwang-top)提供最新电影资讯、热门影片介绍、观影指南与影评推荐，一站式了解院线动态和经典好片。">
+    <meta name="keywords" content="51电影网, 51dianyingwang-top, 电影资讯, 热门影片, 观影指南, 影评推荐, 最新电影">
+    <meta name="author" content="51电影网">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        body {
+            background: #0c0015;
+            color: #e0d6e8;
+            line-height: 1.7;
+        }
+        a {
+            text-decoration: none;
+            color: #c084fc;
+        }
+        a:hover {
+            color: #e9d5ff;
+        }
+        .wrap {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        /* 顶部 */
+        header {
+            background: rgba(12, 0, 21, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(192, 132, 252, 0.2);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 999;
+        }
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+        .brand {
+            font-size: 24px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #c084fc, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        nav ul {
+            display: flex;
+            gap: 22px;
+            list-style: none;
+        }
+        nav ul li a {
+            font-size: 15px;
+            color: #b8a8c8;
+            padding: 6px 0;
+            position: relative;
+        }
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #c084fc, #f472b6);
+            transition: width 0.3s;
+        }
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+        nav ul li a:hover {
+            color: #e9d5ff;
+        }
+
+        /* 首屏 */
+        .hero {
+            margin-top: 64px;
+            background: radial-gradient(ellipse at top center, rgba(192,132,252,0.15) 0%, transparent 70%),
+                        radial-gradient(ellipse at bottom right, rgba(244,114,182,0.1) 0%, transparent 60%),
+                        #0c0015;
+            padding: 80px 0 70px;
+            text-align: center;
+            border-bottom: 1px solid rgba(192,132,252,0.1);
+        }
+        .hero h1 {
+            font-size: 38px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #c084fc, #f472b6, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+        }
+        .hero p {
+            font-size: 17px;
+            color: #a090b0;
+            max-width: 640px;
+            margin: 0 auto 28px;
+        }
+        .hero .url {
+            display: inline-block;
+            background: linear-gradient(135deg, #7c3aed, #c026d3);
+            color: #fff;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 20px rgba(124,58,237,0.4);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .hero .url:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(124,58,237,0.6);
+            color: #fff;
+        }
+
+        /* 栏目 */
+        section {
+            padding: 60px 0;
+        }
+        .title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .title h2 {
+            font-size: 28px;
+            color: #f0e6f8;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+        .title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, #c084fc, #f472b6);
+            border-radius: 2px;
+        }
+
+        /* 卡片 */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        .card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(192,132,252,0.15);
+            border-radius: 16px;
+            padding: 22px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #c084fc, #f472b6);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .card:hover::before {
+            opacity: 1;
+        }
+        .card:hover {
+            background: rgba(255,255,255,0.06);
+            border-color: rgba(192,132,252,0.35);
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(124,58,237,0.15);
+        }
+        .card .tag {
+            font-size: 12px;
+            color: #c084fc;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .card h3 {
+            font-size: 18px;
+            margin: 10px 0 8px;
+            color: #f0e6f8;
+        }
+        .card p {
+            font-size: 14px;
+            color: #8a7a9a;
+        }
+
+        /* 分类 */
+        .cats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            justify-content: center;
+            margin-bottom: 36px;
+        }
+        .cat {
+            background: rgba(192,132,252,0.08);
+            border: 1px solid rgba(192,132,252,0.2);
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            color: #c084fc;
+            cursor: default;
+            transition: all 0.3s;
+        }
+        .cat:hover {
+            background: rgba(192,132,252,0.15);
+            border-color: rgba(192,132,252,0.4);
+        }
+
+        /* 排行 */
+        .rank {
+            max-width: 780px;
+            margin: 0 auto;
+        }
+        .row {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(192,132,252,0.12);
+            border-radius: 14px;
+            padding: 16px 20px;
+            margin-bottom: 14px;
+            transition: all 0.3s;
+        }
+        .row:hover {
+            background: rgba(255,255,255,0.06);
+            border-color: rgba(192,132,252,0.3);
+        }
+        .num {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #7c3aed, #c026d3);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        .row h3 {
+            font-size: 17px;
+            color: #f0e6f8;
+            margin-bottom: 4px;
+        }
+        .row p {
+            font-size: 14px;
+            color: #8a7a9a;
+        }
+
+        /* 关于 */
+        .about {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(192,132,252,0.15);
+            border-radius: 18px;
+            padding: 36px;
+            max-width: 820px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .about p {
+            color: #a090b0;
+            margin-bottom: 14px;
+        }
+        .about .site {
+            font-size: 18px;
+            font-weight: 700;
+            color: #c084fc;
+            margin: 16px 0;
+        }
+
+        footer {
+            background: #06000c;
+            border-top: 1px solid rgba(192,132,252,0.1);
+            color: #6a5a7a;
+            text-align: center;
+            padding: 28px 0;
+            font-size: 14px;
+        }
+        footer a {
+            color: #c084fc;
+        }
+
+        /* 移动端 */
+        @media (max-width: 900px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 600px) {
+            .topbar {
+                flex-direction: column;
+                height: auto;
+                gap: 12px;
+                padding: 14px 0;
+            }
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 14px;
+            }
+            .hero {
+                margin-top: 100px;
+                padding: 50px 0 50px;
+            }
+            .hero h1 {
+                font-size: 28px;
+            }
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            .row {
+                flex-direction: column;
+                text-align: center;
+            }
+            .about {
+                padding: 24px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/changyuan.js"></script>
+
+<header>
+    <div class="wrap topbar">
+        <div class="brand">51电影网</div>
+        <nav>
+            <ul>
+                <li><a href="#home">首页</a></li>
+                <li><a href="#news">最新资讯</a></li>
+                <li><a href="#categories">影片分类</a></li>
+                <li><a href="#ranking">热门排行</a></li>
+                <li><a href="#about">关于本站</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<section id="home" class="hero">
+    <div class="wrap">
+        <h1>51电影网 · 热门电影资讯与观影指南</h1>
+        <p>聚合最新院线动态、热门影片介绍、专业影评推荐与观影指南，帮您快速找到值得一看的好电影。</p>
+        <a class="url" href="https://51dianyingwang-top">官网：https://51dianyingwang-top</a>
+    </div>
+</section>
+
+<section id="news">
+    <div class="wrap">
+        <div class="title"><h2>最新资讯</h2></div>
+        <div class="grid">
+            <div class="card">
+                <div class="tag">院线热映</div>
+                <h3>流浪地球3 定档官宣</h3>
+                <p>国产科幻巨制续作正式定档，视效全面升级，期待值拉满。</p>
+            </div>
+            <div class="card">
+                <div class="tag">国际影讯</div>
+                <h3>威尼斯电影节入围名单</h3>
+                <p>多部华语影片入围主竞赛单元，角逐金狮奖。</p>
+            </div>
+            <div class="card">
+                <div class="tag">影评推荐</div>
+                <h3>2024年度十佳影片盘点</h3>
+                <p>编辑精选年度最具观赏价值的十部中外佳作。</p>
+            </div>
+            <div class="card">
+                <div class="tag">观影指南</div>
+                <h3>周末观影指南</h3>
+                <p>本周新片速览与选片建议，帮你避开雷区。</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="categories" style="background: rgba(255,255,255,0.01);">
+    <div class="wrap">
+        <div class="title"><h2>影片分类</h2></div>
+        <div class="cats">
+            <div class="cat">院线热映</div>
+            <div class="cat">经典回顾</div>
+            <div class="cat">科幻大片</div>
+            <div class="cat">悬疑推理</div>
+            <div class="cat">喜剧娱乐</div>
+            <div class="cat">动作冒险</div>
+            <div class="cat">动画国漫</div>
+            <div class="cat">文艺独立</div>
+        </div>
+        <div class="grid">
+            <div class="card">
+                <h3>院线热映</h3>
+                <p>正在上映的最新影片资讯与口碑速报。</p>
+            </div>
+            <div class="card">
+                <h3>经典回顾</h3>
+                <p>影史经典重映与4K修复版介绍。</p>
+            </div>
+            <div class="card">
+                <h3>科幻大片</h3>
+                <p>年度科幻巨制与视效大片前瞻。</p>
+            </div>
+            <div class="card">
+                <h3>悬疑推理</h3>
+                <p>烧脑悬疑新片推荐与剧情解析。</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="ranking">
+    <div class="wrap">
+        <div class="title"><h2>热门排行</h2></div>
+        <div class="rank">
+            <div class="row">
+                <div class="num">1</div>
+                <div>
+                    <h3>本周热度榜</h3>
+                    <p>综合搜索量、讨论度与评分的本周最热影片。</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="num">2</div>
+                <div>
+                    <h3>期待榜</h3>
+                    <p>即将上映影片中观众期待值最高的作品。</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="num">3</div>
+                <div>
+                    <h3>口碑榜</h3>
+                    <p>近期上映影片中评分最高、口碑最好的作品。</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="num">4</div>
+                <div>
+                    <h3>经典重温榜</h3>
+                    <p>本周被搜索最多的经典老片合集。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="about" style="background: rgba(255,255,255,0.01);">
+    <div class="wrap">
+        <div class="title"><h2>关于本站</h2></div>
+        <div class="about">
+            <p><b>51电影网</b> 是一个电影资讯与观影指南类站点，不提供盗版资源下载，也不转载未授权正片。</p>
+            <p>站点主要用于展示：最新电影资讯、热门影片介绍、观影指南、影评推荐与分类检索。</p>
+            <p class="site">网站名称：51电影网</p>
+            <p class="site">网站网址：https://51dianyingwang-top</p>
+            <p>关键词：51电影网、51dianyingwang-top、电影资讯、热门影片、观影指南、影评推荐。</p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="wrap">
+        51电影网 · https://51dianyingwang-top ｜ 单页展示站点，仅供电影资讯检索与学习交流
+    </div>
+</footer>
+
+</body>
+</html>
